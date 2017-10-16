@@ -1,0 +1,223 @@
+Petfinder API
+
+OUR KEYS
+-------------------------------------------------------------------
+API KEY: a7ad47e6ae1a70874b4bd9bb0da43d69 
+API SECRET: 6b666d3bdb0960c31b6272509955c434 
+
+Overview
+
+The Petfinder API gives developers access to access Petfinder's database of over 300,000 adoptable pets and 11,000 animal welfare organizations (AWO). In addition to searching for adoptable pets on the Petfinder.com web site, you can use the API to create your own dynamic pet web sites or applications, using the same data we use on Petfinder.com.
+THIS PAGE IS INTENDED FOR DEVELOPERS
+Table of Contents
+
+1. Getting Started
+
+2. Restrictions
+
+3. Request Format
+	
+
+4. Developer Keys
+
+5. Response Formats
+	
+
+6. API Methods
+
+XML Schema 0.9 (XSD)
+
+Petfinder API FAQ
+
+1.    Getting Started
+
+    You will need an API key and secret to access the Petfinder API, which you can obtain by registering here. You will also be asked for the domain of the web site on which your applications will run. We do not currently use this information for restricting access, but we may do so in the future to protect your security information. Developers of commercial or high-volume sites and applications should refer to the restrictions below.
+    Restrictions
+
+2.    The following usage restrictions apply to users of the API:
+        Total requests per day: 10,000
+        Records per request: 1,000
+        Maximum records per search: 2,000
+
+    If your usage may exceed these limits, please contact us at api-help@petfinder.com.
+    Request Format
+
+ 3. The Petfinder API is a RESTful API, which means you access it using standard HTTP request methods. GET is used for reading data, and POST, PUT and DELETE are used for updating data (not supported yet). Arguments are passed in the query string for GET and DELETE, and in the request body for POST and PUT.
+
+    URLs are of the form: http://api.petfinder.com/subsystem.method
+
+    For GET calls, all arguments are specified in the URL query string like this: http://api.petfinder.com/my.method?key=12345&arg1=foo
+
+    For POST, PUT and DELETE calls, all arguments should be specified in the request body, so the URL would be http://api.petfinder.com/my.method while the request body would contain key=12345&arg1=foo
+
+    Cross-Domain Support (JSONP)
+
+    The Petfinder API supports JSONP for cross-domain JavaScript requests. When making any request that is in JSON format, the callback parameter may be added to denote that this is a JSONP request. The value for the callback parameter should be a unique string.
+
+    Below is a basic example of a JSONP request, using jQuery. Here the callback=? query string parameter is required to specify that it is a JSONP call. jQuery will replace the '?' within the query string with a unique time-stamped value (i.e. 'jQuery110206092635430395603_1391456463806').
+
+    $.getJSON('http://api.petfinder.com/my.method?format=json&key=12345&callback=?')
+      .done(function(petApiData) { alert('Data retrieved!'; })
+      .error(function(err) { alert('Error retrieving data!'); 
+    });
+
+ 4.   Developer Keys
+
+    When you register to use the API you will receive a key and a secret. The key identifies you in each API request and can be safely displayed and transmitted unencrypted. The secret is used to sign requests that require authentication. The secret, as its name implies, should be kept private and never shared or displayed.
+
+    | Back to Top |
+    Response Formats
+
+    The Petfinder API can respond in one of two formats: XML (the default) or JSON. The XML format is specified by the XML schema at http://api.petfinder.com/schemas/0.9/petfinder.xsd The JSON output is based on the standard used by the Google Data API. You can change the output to JSON with format=json. For now we'll focus on the XML format here, but the concepts are directly applicable to JSON.
+
+    Every XML response is wrapped in a petfinder container tag. Within that container is a header and optional data tags.
+
+    Response Header
+
+    Responses always contain a header, which contains information about your request:
+        version: API version
+        timestamp: the date and time the response was issued
+        status: the status code for this request
+        message: an optional diagnostic message, usually provided on error 
+    Response Data
+
+    The response data directly follows the header, and contains the results of your request. The tags returned vary depending on the method called, so refer to that method's documentation for details.
+
+    Some methods, such as pet.find, can return thousands of records. For these methods, instead of returning and processing all the results in one call, you can iterate through the results a few at a time by providing the number of records to return, and an optional offset from the start of the list. To do this, specify the number of records to return as count (default is 25) and call the method. The response will contain a lastOffset tag that you will use as the offset to the next call, leaving all other arguments the same.
+    Status Codes
+    Code 	Name 	Notes
+    100 	PFAPI_OK 	No error
+    200 	PFAPI_ERR_INVALID 	Invalid request
+    201 	PFAPI_ERR_NOENT 	Record does not exist
+    202 	PFAPI_ERR_LIMIT 	A limit was exceeded
+    203 	PFAPI_ERR_LOCATION 	Invalid geographical location
+    300 	PFAPI_ERR_UNAUTHORIZED 	Request is unauthorized
+    301 	PFAPI_ERR_AUTHFAIL 	Authentication failure
+    999 	PFAPI_ERR_INTERNAL 	Generic internal error
+
+    | Back to Top |
+    API Methods
+    breed.list
+
+    Returns a list of breeds for a particular animal.
+    ARGUMENTS
+    Name 	Type 	Required? 	Description
+    key 	string 	required 	your developer key
+    animal 	string 	required 	type of animal (barnyard, bird, cat, dog, horse, reptile, smallfurry)
+    format 	string 	optional (default=xml) 	Response format: xml, json
+
+    XML return type: petfinderBreedList
+
+    | Back to Top |
+    pet.get
+
+    Returns a record for a single pet.
+    ARGUMENTS
+    Name 	Type 	Required? 	Description
+    key 	string 	required 	your developer key
+    id 	integer 	required 	pet ID
+    format 	string 	optional (default=xml) 	Response format: xml, json
+
+    XML return type: petfinderPetRecord
+
+    | Back to Top |
+    pet.getRandom
+
+    Returns a record for a randomly selected pet. You can choose the characteristics of the pet you want returned using the various arguments to this method.
+
+    This method can return pet records in three formats:
+        id: just the pet ID
+        basic: essential information like name, animal, breed, shelter ID, primary photo
+        full: the complete pet record 
+
+    ARGUMENTS
+    Name 	Type 	Required? 	Description
+    key 	string 	required 	your developer key
+    animal 	string 	optional 	type of animal (barnyard, bird, cat, dog, horse, reptile, smallfurry)
+    breed 	string 	optional 	breed of animal (use breeds.list for a list of valid breeds)
+    size 	string 	optional 	size of animal (S=small, M=medium, L=large, XL=extra-large)
+    sex 	character 	optional 	M=male, F=female
+    location 	string 	optional 	the ZIP/postal code or city and state the animal should be located (NOTE: the closest possible animal will be selected)
+    shelterid 	string 	optional 	ID of the shelter that posted the pet
+    output 	string 	optional (default=id) 	How much of the pet record to return: id, basic, full
+    format 	string 	optional (default=xml) 	Response format: xml, json
+
+    XML return type: petfinderPetRecord
+
+    | Back to Top |
+    pet.find
+
+    Searches for pets according to the criteria you provde and returns a collection of pet records matching your search. The results will contain at most count records per query, and a lastOffset tag. To retrieve the next result set, use the lastOffset value as the offset to the next pet.find call.
+
+    NOTE: the total number of records you are allowed to request may vary depending on the type of developer key you have.
+    ARGUMENTS
+    Name 	Type 	Required? 	Description
+    key 	string 	required 	your developer key
+    animal 	string 	optional 	type of animal (barnyard, bird, cat, dog, horse, reptile, smallfurry)
+    breed 	string 	optional 	breed of animal (use breed.list for a list of valid breeds)
+    size 	string 	optional 	size of animal (S=small, M=medium, L=large, XL=extra-large)
+    sex 	character 	optional 	M=male, F=female
+    location 	string 	required 	the ZIP/postal code or city and state where the search should begin
+    age 	string 	optional 	age of the animal (Baby, Young, Adult, Senior)
+    offset 	string 	optional 	set this to the value of lastOffset returned by a previous call to pet.find, and it will retrieve the next result set
+    count 	integer 	optional 	how many records to return for this particular API call (default is 25)
+    output 	string 	optional (default=basic) 	How much of each record to return: basic (no description) or full (includes description)
+    format 	string 	optional (default=xml) 	Response format: xml, json
+
+    XML return type: petfinderPetRecordList
+
+    | Back to Top |
+    shelter.find
+
+    Returns a collection of shelter records matching your search criteria.
+    ARGUMENTS
+    Name 	Type 	Required? 	Description
+    key 	string 	required 	your developer key
+    location 	string 	required 	the ZIP/postal code or city and state where the search should begin
+    name 	string 	optional if location is specified 	full or partial shelter name
+    offset 	integer 	optional 	offset into the result set (default is 0)
+    count 	integer 	optional 	how many records to return for this particular API call (default is 25)
+    format 	string 	optional (default=xml) 	Response format: xml, json
+
+    XML return type: petfinderShelterRecordList
+
+    | Back to Top |
+    shelter.get
+
+    Returns a record for a single shelter.
+    ARGUMENTS
+    Name 	Type 	Required? 	Description
+    key 	string 	required 	your developer key
+    id 	string 	required 	shelter ID (e.g. NJ94)
+    format 	string 	optional (default=xml) 	Response format: xml, json
+
+    XML return type: petfinderShelterRecord
+
+    | Back to Top |
+    shelter.getPets
+
+    Returns a list of IDs or collection of pet records for an individual shelter
+    ARGUMENTS
+    Name 	Type 	Required? 	Description
+    key 	string 	required 	your developer key
+    id 	string 	required 	shelter ID (e.g. NJ94)
+    status 	character 	optional (default=A, public may only list adoptable pets) 	A=adoptable, H=hold, P=pending, X=adopted/removed
+    offset 	integer 	optional 	offset into the result set (default is 0)
+    count 	integer 	optional 	how many records to return for this particular API call (default is 25)
+    output 	string 	optional (default=basic) 	How much of the pet record to return: id, basic (no description), full
+    format 	string 	optional (default=xml) 	Response format: xml, json
+
+    XML return type: petfinderPetRecordList
+
+    | Back to Top |
+    shelter.listByBreed
+
+    Returns a list of shelter IDs listing animals of a particular breed.
+    ARGUMENTS
+    Name 	Type 	Required? 	Description
+    key 	string 	required 	your developer key
+    animal 	string 	required 	type of animal (barnyard, bird, cat, dog, horse, reptile, smallfurry)
+    breed 	string 	required 	breed of animal(use breed.list for a list of valid breeds)
+    offset 	integer 	optional 	offset into the result set (default is 0)
+    count 	integer 	optional 	how many records to return for this particular API call (default is 25)
+    format 	string 	optional (default=xml) 	Response format: xml, json
