@@ -28,7 +28,7 @@ public class arrayAdapter extends ArrayAdapter<cards>{
         ImageView image = (ImageView) convertView.findViewById(R.id.image);
 
         name.setText(card_item.getName());
-        image.setImageResource(R.mipmap.ic_launcher); // ADDS IMAGES HERE
+        image.setImageResource(R.mipmap.sheltermatch); // ADDS IMAGES HERE
 
         return convertView;
     }

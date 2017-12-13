@@ -14,12 +14,23 @@ import java.util.List;
 
 public class MainActivity extends AppCompatActivity {
     private cards cards_data[];
+    private static cards saved_data[] = new cards[15]; // User saved profiles
     private ArrayAdapter arrayAdapter;
     private int i;
+    private int index = 0;
 
     ListView listView;
     List<cards> rowItems;
-    // Connect DB here
+    // Connect DB here NOTE: We couldn't connect to the Petfinder API so we use an array as an example
+
+    // Returns the watchlist
+    public static cards [] getWatchlist() {
+        return(saved_data);
+    }
+
+    public int getIndex() {
+        return index;
+    }
 
     @Override
     protected void onCreate(Bundle savedInstanceState) {
@@ -46,12 +57,15 @@ public class MainActivity extends AppCompatActivity {
                 //Do something on the left!
                 //You also have access to the original object.
                 //If you want to use it just cast it (String) dataObject
-                Toast.makeText(MainActivity.this, "Left!", Toast.LENGTH_SHORT).show();
+                Toast.makeText(MainActivity.this, "Skipped!", Toast.LENGTH_SHORT).show();
             }
 
             @Override
+            // Save pet information here
             public void onRightCardExit(Object dataObject) {
-                Toast.makeText(MainActivity.this, "Right!", Toast.LENGTH_SHORT).show();
+                cards obj = (cards) dataObject;
+                saved_data[index] = obj; // Insert pet into saved journal
+                Toast.makeText(MainActivity.this, "Saved!", Toast.LENGTH_SHORT).show();
             }
 
             @Override
@@ -66,8 +80,8 @@ public class MainActivity extends AppCompatActivity {
             public void onScroll(float scrollProgressPercent) {
 
             }
-        });
 
+        });
 
         // Optionally add an OnItemClickListener
         flingContainer.setOnItemClickListener(new SwipeFlingAdapterView.OnItemClickListener() {
