@@ -26,5 +26,4 @@ public class cards {
         this.name = name;
     }
 
-
 }
