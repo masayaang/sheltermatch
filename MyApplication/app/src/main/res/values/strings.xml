@@ -1,0 +1,19 @@
+<resources>
+    <string name="app_name">ShelterMatch©</string>
+    <string name="hint_name">Name</string>
+    <string name="hint_email">Email</string>
+    <string name="hint_password">Password</string>
+    <string name="hint_confirm_password">Confirm password</string>
+    <string name="text_login">Login</string>
+    <string name="text_register">Register</string>
+    <string name="error_message_name">Enter full name</string>
+    <string name="error_message_email">Enter valid email</string>
+    <string name="error_message_password">Enter password</string>
+    <string name="success_message">Registration successful</string>
+    <string name="text_not_member">No account? Create one</string>
+    <string name="text_already_member">Already a member? Login</string>
+    <string name="error_email_exists">Email already exists</string>
+    <string name="error_password_match">Password does not match</string>
+    <string name="error_valid_email_password">Wrong email or password</string>
+    <string name="text_member">Already a member? Login</string>
+</resources>

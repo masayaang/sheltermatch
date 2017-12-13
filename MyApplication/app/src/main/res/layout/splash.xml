@@ -1,0 +1,25 @@
+<?xml version="1.0" encoding="utf-8"?>
+<android.support.v4.widget.NestedScrollView xmlns:android="http://schemas.android.com/apk/res/android"
+    xmlns:tools="http://schemas.android.com/tools"
+    android:id="@+id/nestedScrollView"
+    android:layout_width="match_parent"
+    android:layout_height="match_parent"
+    android:background="@drawable/rott_splash"
+    android:padding="20dp"
+    tools:context=".LoginActivity">
+
+    <android.support.v7.widget.LinearLayoutCompat
+        android:layout_width="match_parent"
+        android:layout_height="match_parent"
+        android:orientation="vertical">
+
+        <TextView
+            android:layout_width="wrap_content"
+            android:layout_height="wrap_content"
+            android:layout_margin="50dp"
+            android:text="WORLD'S WORST LOADING SCREEN..."
+            android:textColor="@color/colorSplash"
+            android:textSize="20sp"/>
+    </android.support.v7.widget.LinearLayoutCompat>
+
+</android.support.v4.widget.NestedScrollView>
