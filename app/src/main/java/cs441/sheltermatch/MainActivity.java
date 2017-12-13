@@ -1,14 +1,14 @@
 package cs441.sheltermatch;
 
+import android.content.Intent;
 import android.support.v7.app.AppCompatActivity;
 import android.os.Bundle;
 import android.util.Log;
+import android.view.View;
 import android.widget.ArrayAdapter;
 import android.widget.ListView;
 import android.widget.Toast;
-
 import com.lorentzos.flingswipe.SwipeFlingAdapterView;
-
 import java.util.ArrayList;
 import java.util.List;
 
@@ -65,6 +65,7 @@ public class MainActivity extends AppCompatActivity {
             public void onRightCardExit(Object dataObject) {
                 cards obj = (cards) dataObject;
                 saved_data[index] = obj; // Insert pet into saved journal
+                index++;
                 Toast.makeText(MainActivity.this, "Saved!", Toast.LENGTH_SHORT).show();
             }
 
@@ -78,7 +79,6 @@ public class MainActivity extends AppCompatActivity {
 
             @Override
             public void onScroll(float scrollProgressPercent) {
-
             }
 
         });
@@ -87,9 +87,24 @@ public class MainActivity extends AppCompatActivity {
         flingContainer.setOnItemClickListener(new SwipeFlingAdapterView.OnItemClickListener() {
             @Override
             public void onItemClicked(int itemPosition, Object dataObject) {
-                Toast.makeText(MainActivity.this, "Click!", Toast.LENGTH_SHORT).show();
+                Toast.makeText(MainActivity.this, "Item Clicked", Toast.LENGTH_SHORT).show();
             }
         });
+    }
+
+        // Closes the application
+        public void signOut(View view) {
+            finish();
+            System.exit(0);
+            return;
+        }
+
+        // Gets the watch list of saved pets
+        public void goToWatchlist(View view) {
+            Intent intent = new Intent(MainActivity.this, watchList.class);
+            startActivity(intent);
+            return;
+        }
 
     }
 
